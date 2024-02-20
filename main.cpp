@@ -5,6 +5,11 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    // Added these parameters (otherwise qsettings does not work)
+    app.setOrganizationName("LHT_Interview");
+    app.setOrganizationDomain("lhtinterview.com");
+    app.setApplicationName("LHTTestQML");
+
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/QMLTaskLHT/Main.qml"_qs);
     QObject::connect(

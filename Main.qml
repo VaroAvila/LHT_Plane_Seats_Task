@@ -1,7 +1,8 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
+import Qt.labs.settings
 
 ApplicationWindow {
     visible: true
@@ -11,6 +12,11 @@ ApplicationWindow {
     Material.theme: Material.Dark
     Material.accent: Material.Blue
 
+    Settings {
+        id: appSettings
+    }
+
+    // Main interactive panel layout
     ScrollView {
         anchors.centerIn: parent
         Frame {
@@ -26,8 +32,11 @@ ApplicationWindow {
                     horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 17
                     color: "white"
+                    Layout.fillWidth: true
+
                 }
 
+                // Backrest controls layout
                 ColumnLayout {
                     spacing: 5
 
@@ -36,6 +45,7 @@ ApplicationWindow {
                         horizontalAlignment: Text.AlignHCenter
                         font.pointSize: 14
                         color: "white"
+                        Layout.fillWidth: true
                     }
 
                     RowLayout {
@@ -79,6 +89,7 @@ ApplicationWindow {
                     }
                 }
 
+                // Footrest controls layout
                 ColumnLayout {
                     spacing: 5
 
@@ -87,6 +98,7 @@ ApplicationWindow {
                         horizontalAlignment: Text.AlignHCenter
                         font.pointSize: 14
                         color: "white"
+                        Layout.fillWidth: true
                     }
 
                     RowLayout {
@@ -130,6 +142,7 @@ ApplicationWindow {
                     }
                 }
 
+                // Headrest controls layout
                 ColumnLayout {
                     spacing: 5
 
@@ -138,6 +151,7 @@ ApplicationWindow {
                         horizontalAlignment: Text.AlignHCenter
                         font.pointSize: 14
                         color: "white"
+                        Layout.fillWidth: true
                     }
 
                     RowLayout {
@@ -161,8 +175,8 @@ ApplicationWindow {
                         ProgressBar {
                             id: progressBarHead
                             from: 0
-                            to: 5
-                            value: 2.5
+                            to: 6
+                            value: 3
                             Layout.fillWidth: true
                         }
 
@@ -183,6 +197,7 @@ ApplicationWindow {
                     }
                 }
 
+                // Cushion controls layout
                 ColumnLayout {
                     spacing: 5
 
@@ -191,6 +206,7 @@ ApplicationWindow {
                         horizontalAlignment: Text.AlignHCenter
                         font.pointSize: 14
                         color: "white"
+                        Layout.fillWidth: true
                     }
 
                     RowLayout {
@@ -236,15 +252,28 @@ ApplicationWindow {
                     }
                 }
 
+                // Load and Save positions control layout
                 RowLayout {
                     spacing: 20
 
                     Button {
                         text: qsTr("LOAD LAST SEAT CONFIGURATION")
+                        onClicked: { // If there is no saved position, the default value is saved
+                            progressBarBack.value = appSettings.value("backrest", 90);
+                            progressBarFoot.value = appSettings.value("footrest", 2.5);
+                            progressBarHead.value = appSettings.value("headrest", 3);
+                            progressBarCushion.value = appSettings.value("cushion", 2);
+                        }
                     }
 
                     Button {
                         text: qsTr("SAVE CURRENT SEAT CONFIGURATION")
+                        onClicked: {
+                            appSettings.setValue("backrest", progressBarBack.value);
+                            appSettings.setValue("footrest", progressBarFoot.value);
+                            appSettings.setValue("headrest", progressBarHead.value);
+                            appSettings.setValue("cushion", progressBarCushion.value);
+                        }
                     }
                 }
             }
